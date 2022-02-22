@@ -141,7 +141,7 @@ export interface Usd {
 }
 
 function Coin() {
-  const coinId = 'btc-bitcoin';
+  const { coinId = '' } = useParams<'coinId'>();
 
   const chartMatch = useMatch(':coinId/chart');
   const priceMatch = useMatch(':coinId/price');
