@@ -1,7 +1,6 @@
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, Outlet, useParams, useMatch } from 'react-router-dom';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import { Interface } from 'readline';
 
 const Container = styled.div`
   padding: 1rem;
@@ -44,6 +43,28 @@ const OverviewItem = styled.div`
 
 const Description = styled.div`
   margin: 1rem 0;
+`;
+
+const Tabs = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 25px 0px;
+  gap: 10px;
+`;
+
+const Tab = styled.span<{ isActive: boolean }>`
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 400;
+  background-color: black;
+  padding: 7px 0px;
+  border-radius: 10px;
+  color: ${(props) => (props.isActive ? props.theme.accentColor : props.theme.textColor)};
+
+  a {
+    display: block;
+  }
 `;
 
 interface InfoData {
@@ -118,12 +139,13 @@ export interface Usd {
 }
 
 function Coin() {
-  const { state } = useLocation();
   const { coinId } = useParams<{ coinId: string }>();
 
   const [loading, setLoading] = useState<boolean>(true);
   const [info, setInfo] = useState<InfoData>();
   const [price, setPrice] = useState<PriceData>();
+  const chartMatch = useMatch(':coinId/chart');
+  const priceMatch = useMatch(':coinId/price');
 
   useEffect(() => {
     (async () => {
@@ -145,7 +167,7 @@ function Coin() {
   return (
     <Container>
       <Header>
-        <Title>코인 : {coinId}</Title>
+        <Title>{info?.name}</Title>
       </Header>
       {loading ? (
         <Loader>Loading...</Loader>
@@ -176,6 +198,15 @@ function Coin() {
               <span>{price?.max_supply}</span>
             </OverviewItem>
           </Overview>
+          <Tabs>
+            <Tab isActive={chartMatch !== null}>
+              <Link to={`/${coinId}/chart`}>Chart</Link>
+            </Tab>
+            <Tab isActive={priceMatch !== null}>
+              <Link to={`/${coinId}/price`}>Price</Link>
+            </Tab>
+          </Tabs>
+          <Outlet />
         </>
       )}
     </Container>
