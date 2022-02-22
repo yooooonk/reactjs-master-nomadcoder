@@ -1,8 +1,7 @@
 import React from 'react';
 import Router from './routes/Router';
-import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
-import { theme } from './theme';
 
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&family=Roboto:wght@300&display=swap');
@@ -24,10 +23,10 @@ const GlobalStyle = createGlobalStyle`
 `;
 function App() {
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <GlobalStyle />
       <Router />
-    </ThemeProvider>
+    </>
   );
 }
 
