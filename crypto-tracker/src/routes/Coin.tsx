@@ -1,12 +1,14 @@
-import { Link, Outlet, useParams, useMatch } from 'react-router-dom';
+import { Link, Route, Routes, useMatch, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { fetchCoinInfo, fetchCoinTickers } from '../api';
+import Chart from './Chart';
+import Price from './Price';
 
 const Container = styled.div`
   padding: 1rem;
   max-width: 480px;
+
   margin: 0 auto;
 `;
 
@@ -197,7 +199,10 @@ function Coin() {
               <Link to={`/${coinId}/price`}>Price</Link>
             </Tab>
           </Tabs>
-          <Outlet />
+          <Routes>
+            <Route path='chart' element={<Chart coinId={coinId} />} />
+            <Route path='price' element={<Price coinId={coinId} />} />
+          </Routes>
         </>
       )}
     </Container>
