@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { fetchCoins } from '../api';
+import { useSetRecoilState } from 'recoil';
+import { isDarkAtom } from '../atoms';
 
 const Container = styled.div`
   padding: 1rem;
@@ -21,7 +23,8 @@ const CoinsList = styled.ul``;
 
 const Coin = styled.li`
   background-color: white;
-  color: ${(props) => props.theme.bgColor};
+  color: ${(props) => props.theme.textColor};
+  border: 1px solid ${(props) => props.theme.borderColor};
   padding: 20px;
   margin-bottom: 10px;
   border-radius: 1rem;
@@ -68,12 +71,15 @@ interface CoinInterface {
 }
 
 function Coins() {
+  const setIsDark = useSetRecoilState(isDarkAtom);
   const { data, isLoading } = useQuery<CoinInterface[]>('allCoins', fetchCoins);
 
+  const toggleTheme = () => setIsDark((prev) => !prev);
   return (
     <Container>
       <Header>
         <Title>코인</Title>
+        <button onClick={toggleTheme}>Toggle mode</button>
       </Header>
       {isLoading ? (
         <Loader>Loading...</Loader>
